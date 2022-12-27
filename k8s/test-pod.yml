@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: posts
+  name: posts
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: posts
+  template:
+    metadata:
+      labels:
+        app: posts  
+    spec:
+      terminationGracePeriodSeconds: 150 # 24 hours
+      containers:
+      - image: honey2156/posts:0.0.11
+        name: posts
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sh", "-c", "chmod 777 /usr/src/app/test.sh && /usr/src/app/test.sh"]
